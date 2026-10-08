@@ -1,0 +1,6 @@
+{
+  "lstm_scale": 0.9750000000000001,
+  "lstm_offset_hours": -0.44999999999999984,
+  "lstm_selection_metric": "within_1h_percent",
+  "selection_data": "validation engines only"
+}

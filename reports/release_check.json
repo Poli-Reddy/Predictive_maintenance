@@ -1,0 +1,12 @@
+{
+  "checks": {
+    "artifacts_present": true,
+    "engine_disjoint": true,
+    "test_not_used_for_selection": true,
+    "common_hybrid_r2_ge_80": true,
+    "full_test_hybrid_r2_ge_80": true,
+    "production_model_is_xgb": true,
+    "unit_tests": true
+  },
+  "passed": true
+}

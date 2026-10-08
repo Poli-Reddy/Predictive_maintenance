@@ -1,0 +1,65 @@
+project:
+  name: arjun_powerpack_rul_hybrid_v3
+  seed: 20261008
+  version: 3.0.0
+
+dataset:
+  n_engines: 800
+  min_steps: 720
+  max_steps: 1600
+  sample_period_min: 1.0
+  output_path: data/raw/arjun_powerpack_synthetic_v3.csv.gz
+  split_manifest: data/processed/engine_splits.json
+
+split:
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  strategy: chronological_engine_cohort
+  gap_engines: 0
+
+features:
+  lags: [1, 15]
+  windows: [15, 60]
+  ewm_spans: [120, 360]
+  min_period_ratio: 0.25
+
+xgb:
+  objective: reg:absoluteerror
+  n_estimators_candidates: [160]
+  max_depth_candidates: [6]
+  learning_rate_candidates: [0.05]
+  min_child_weight_candidates: [6]
+  subsample: 0.90
+  colsample_bytree: 0.85
+  reg_alpha: 0.05
+  reg_lambda: 3.0
+  tree_method: hist
+  n_jobs: 4
+
+kalman:
+  selection_metric: within_1h_percent
+  candidates:
+    - [0.002, 0.00001, 0.30]
+    - [0.01, 0.00001, 0.30]
+    - [0.005, 0.0002, 0.15]
+
+lstm:
+  sequence_length: 60
+  stride: 5
+  hidden_size: 48
+  num_layers: 2
+  dropout: 0.15
+  lr: 0.001
+  weight_decay: 0.00001
+  batch_size: 1024
+  max_train_sequences: 80000
+  epochs: 12
+  patience: 3
+  refit_final: false
+  test_stride: 5
+  torch_threads: 8
+
+training_sampling:
+  # Zero disables sampling and trains on all causal-feature rows from the training engines.
+  xgb_max_rows_per_engine: 0

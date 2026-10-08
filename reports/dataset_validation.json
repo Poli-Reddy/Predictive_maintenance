@@ -1,0 +1,39 @@
+{
+  "rows": 939590,
+  "engines": 800,
+  "missing_rate": {
+    "engine_rpm": 0.02404772294298577,
+    "transmission_rpm": 0.023096244106471972,
+    "engine_coolant_temp_c": 0.02379548526484956,
+    "transmission_oil_temp_c": 0.023782713736842664,
+    "engine_oil_pressure_bar": 0.02273757702827829,
+    "clutch_pressure_bar": 0.023300588554582318,
+    "solenoid_current_a": 0.024057301588990943,
+    "vehicle_speed_kph": 0.02376568503283347
+  },
+  "environment_counts": {
+    "temperate": 451983,
+    "hot_desert": 224551,
+    "cold": 134178,
+    "high_altitude": 128878
+  },
+  "failure_mode_counts": {
+    "thermal_aging": 284764,
+    "lubrication_degradation": 273594,
+    "transmission_wear": 192478,
+    "mixed_aging": 188754
+  },
+  "checks": {
+    "rows_positive": true,
+    "engines_expected": true,
+    "sensor_columns_present": true,
+    "sensor_finite_or_missing": true,
+    "rul_nonnegative": true,
+    "rul_monotone_per_engine": true,
+    "time_monotone_per_engine": true,
+    "rul_zero_at_failure": true,
+    "engine_split_disjoint": true,
+    "no_duplicate_engine_timestamp": true
+  },
+  "failed_checks": []
+}

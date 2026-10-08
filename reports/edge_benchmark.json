@@ -1,0 +1,9 @@
+{
+  "history_rows": 360,
+  "feature_generation_seconds": 0.08036010002251714,
+  "xgb_prediction_seconds": 0.011833199998363853,
+  "kalman_seconds": 0.16913020005449653,
+  "package_bytes": 1234775,
+  "package_mb": 1.1775732040405273,
+  "last_rul_hours": 12.859880941392422
+}

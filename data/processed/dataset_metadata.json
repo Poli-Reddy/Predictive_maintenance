@@ -1,0 +1,28 @@
+{
+  "rows": 939590,
+  "engines": 800,
+  "sensors": [
+    "engine_rpm",
+    "transmission_rpm",
+    "engine_coolant_temp_c",
+    "transmission_oil_temp_c",
+    "engine_oil_pressure_bar",
+    "clutch_pressure_bar",
+    "solenoid_current_a",
+    "vehicle_speed_kph"
+  ],
+  "environments": [
+    "cold",
+    "high_altitude",
+    "hot_desert",
+    "temperate"
+  ],
+  "failure_modes": [
+    "lubrication_degradation",
+    "mixed_aging",
+    "thermal_aging",
+    "transmission_wear"
+  ],
+  "rul_definition": "RUL = simulated run-to-failure time minus current timestamp; no future telemetry is exposed to model features.",
+  "simulation_only": true
+}

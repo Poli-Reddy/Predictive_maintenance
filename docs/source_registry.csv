@@ -1,0 +1,8 @@
+source_id,title,organization,year,url,used_for
+SRC01,Health Monitoring for Armoured Fighting Vehicles,CVRDE / I-DAD,2016,https://pdfcoffee.com/innovative-design-and-development-practices-in-aerospace-and-automotive-engineering-i-dad-february-22-24-2016-pdf-pdf-free.html,Public powerpack sensor channels and health-monitoring architecture
+SRC02,I-DAD 2016 Schedule and Abstracts,Vel Tech / I-DAD,2016,https://www.fzt.haw-hamburg.de/pers/Scholz/Indien/IDAD_2016_Abstracts.pdf,Independent conference abstract confirming the CVRDE study exists
+SRC03,DRDO Products for Export 2025,DRDO,2025,https://www.drdo.gov.in/drdo/sites/default/files/schemes_services/CompendiumProductforExport2025.pdf,Public Arjun platform/powerplant anchors and variant context
+SRC04,BEML EOI for Representative,Embassy/ BEML,2021,https://indembassysuriname.gov.in/public_files/assets/pdf/BEML_EOI_for_appointment_of_Representative.pdf,Public 1400 HP @ 2400 rpm anchor for Arjun powerpack material
+SRC05,India to Develop Engine for New Arjun Tanks,DRDO newsletter,2024,https://www.drdo.gov.in/drdo/sites/default/files/drdo-news-documents/NPC14Feb2024.pdf,DATRAN-1500 / Arjun Mk1A development context
+SRC06,DATRAN Test Vehicle - Commencement of Integration,DRDO,2026,https://drdo.gov.in/drdo/sites/default/files/publication-document/NL_Jan2026.pdf,DATRAN test-vehicle/powerpack development context
+SRC07,CMAPSS Jet Engine Simulated Data,NASA,2025,https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data,Independent public prognostics benchmark; not mixed with Arjun-like data

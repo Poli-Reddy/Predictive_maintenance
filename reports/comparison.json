@@ -1,0 +1,35 @@
+[
+  {
+    "model": "XGBoost",
+    "common_test_rows": 27416,
+    "MAE_hours": 1.7130019402772108,
+    "RMSE_hours": 2.3493640591053246,
+    "R2": 0.8464707693865161,
+    "R2_percent": 84.64707693865161,
+    "within_1h_percent": 43.222935512109714,
+    "within_2h_percent": 68.80653632915086,
+    "nasa_phm08_score": 4569.853026121511
+  },
+  {
+    "model": "XGBoost + Kalman",
+    "common_test_rows": 27416,
+    "MAE_hours": 1.6810257046696813,
+    "RMSE_hours": 2.311284499007644,
+    "R2": 0.8514073781602143,
+    "R2_percent": 85.14073781602143,
+    "within_1h_percent": 44.20411438576014,
+    "within_2h_percent": 69.63451998832798,
+    "nasa_phm08_score": 4457.899781611311
+  },
+  {
+    "model": "LSTM",
+    "common_test_rows": 27416,
+    "MAE_hours": 1.580755073838999,
+    "RMSE_hours": 2.2282684676575513,
+    "R2": 0.8618898930473001,
+    "R2_percent": 86.18898930473001,
+    "within_1h_percent": 48.292967610154655,
+    "within_2h_percent": 71.92880070032098,
+    "nasa_phm08_score": 4069.704329674718
+  }
+]
