@@ -18,7 +18,9 @@ BANNED_FEATURES = {
     "rul_hours", "failure_mode_sim", "latent_damage", "health_state", "future_rul",
     "environment", "operation_mode_sim", "direction", "engine_id", "timestamp_min",
     "production_batch", "ambient_context_c", "altitude_context_m", "dust_context", "sensor_quality",
-    "service_hours_since_overhaul",
+    # service_hours_since_overhaul ALLOWED: operating hours are known at inference
+    # (tank logs hours, causal past-only, 1 float, C-trivial). Timestamp_min stays
+    # banned as redundant duplicate (service_hours = timestamp_min/60).
 }
 
 

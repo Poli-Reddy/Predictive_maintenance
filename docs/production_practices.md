@@ -12,13 +12,13 @@
 - The model-selection search is performed before final training.
 - Preprocessing artifacts are serialized alongside the model.
 - No feature is allowed to use the target, latent damage, failure mode, production metadata or future timestamp.
-- `service_hours_since_overhaul` is excluded from both model inputs because it is a direct age proxy in the synthetic benchmark.
+- `service_hours_since_overhaul` (operating hours) is allowed as an XGBoost input: known at inference, causal past-only. Failure mode, environment, latent health and future timestamps stay excluded.
 - XGBoost's 120- and 360-minute exponentially weighted sensor features use only current and past measurements.
 - XGBoost is used for the lightweight production model; the LSTM is an alternative sequence baseline, not a production dependency.
 - XGBoost training rows are controlled by `training_sampling.xgb_max_rows_per_engine` after full-resolution causal feature generation. A positive value applies deterministic per-engine sampling; zero uses all training rows. Validation and test rows are never sampled.
 - LSTM training windows are deterministically thinned to `lstm.max_train_sequences` when necessary; validation windows remain unthinned and are used for early stopping/model selection.
 - Kalman tracking is causal and stateful; it consumes only the current XGBoost measurement and its own previous state.
-- XGBoost's objective is configurable; the current experiment uses absolute error. Kalman candidates are selected using validation within-one-hour accuracy with MAE/RMSE tie-breakers.
+- XGBoost's objective is configurable; the production run uses `reg:squarederror` with early-life weighting (RUL > 10 h ×2). Kalman candidates are selected using validation RMSE with MAE tie-breakers; a validation-only linear calibration (scale/offset) is applied to tracked predictions and stored in `models/prediction_calibration.json`.
 - LSTM output calibration is fitted on validation predictions only and serialized separately in `models/prediction_calibration.json`; it is not part of the XGBoost + Kalman production path.
 
 ## Evaluation
@@ -43,3 +43,5 @@ Adjacent one-minute telemetry observations are highly correlated. The trainer fi
 ## Within-one-hour objective
 
 When optimizing the fraction of predictions within one hour of the target, select tree/tracker parameters and any post-processing using validation data only. Report MAE, RMSE, R² and broader tolerance bands alongside the targeted metric, since improving within-one-hour accuracy can worsen other error measures. The current LSTM calibration has this tradeoff and is kept outside the production XGBoost + Kalman inference path.
+
+`scripts/validation_pareto_search.py` provides a train/validation-only search for compact XGBoost/Kalman candidates. It reports both pooled and macro-engine metrics, includes serialized booster size in the Pareto comparison, evaluates the LSTM-comparable validation cadence, and does not alter the production model artifacts. A candidate surfaced by this search still requires evaluation on a newly frozen test cohort before promotion.

@@ -52,3 +52,7 @@ All six full-test metrics improved over the previous XGBoost + Kalman result.
 The candidate's booster is approximately 2.60 MiB in UBJ format, larger than the prior approximately 0.79 MB validation booster. The previous complete serialized production inference artifacts totalled about 1.25 MiB; a deployable package size for this candidate was not built or measured, so the booster-only size is not directly comparable to that complete-package figure.
 
 Keep the current production artifact until this candidate is evaluated once on a newly generated/frozen independent cohort and deployment package size, runtime memory, and target-hardware latency are measured. Synthetic benchmark improvements are not evidence of field performance.
+
+## Superseded
+
+This candidate is retained for history. The production artifact was later replaced by the squarederror + early-weighting run (129 features, depth 6 / 400 trees, scalar Kalman `(0.01, 1e-05, 0.60)`, linear cal 1.02/+0.10): full test 1.7229/2.3148/86.27% in a 1.89 MiB UBJ package. See `reports/final_report.md`.

@@ -11,7 +11,7 @@ import xgboost as xgb
 
 from features import build_features, model_feature_columns
 from kalman import CausalRULKalman
-from preprocess import clip
+from preprocess import clip, causal_despike
 
 
 def main():
@@ -21,10 +21,13 @@ def main():
     root=Path(__file__).resolve().parents[1]
     hist=pd.read_csv(args.history).sort_values("timestamp_min").reset_index(drop=True)
     if hist.engine_id.nunique()!=1: raise ValueError("--history must contain exactly one engine")
+    hist = causal_despike(hist)
     feat=build_features(hist)
     cols=joblib.load(root/"models/feature_columns.joblib")
     qlo=joblib.load(root/"models/xgb_qlo.joblib"); qhi=joblib.load(root/"models/xgb_qhi.joblib"); imp=joblib.load(root/"models/xgb_imputer.joblib")
-    model=xgb.XGBRegressor(); model.load_model(root/"models/xgb_rul.json")
+    model=xgb.XGBRegressor()
+    ubj=root/"models/xgb_rul.ubj"; js=root/"models/xgb_rul.json"
+    model.load_model(ubj if ubj.exists() else js)
     X=imp.transform(clip(feat[cols],qlo,qhi))
     raw=np.clip(model.predict(X),0,None)
     cfg=joblib.load(root/"models/kalman_params.joblib")

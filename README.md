@@ -66,9 +66,19 @@ python src/benchmark_edge.py
 python src/predict_edge.py --history reports/edge_demo_history.csv
 ```
 
+## Validation-only model search
+
+To compare compact XGBoost candidates and Kalman settings without training or evaluating on the test cohort:
+
+```bash
+python scripts/validation_pareto_search.py --config config/config.yaml
+```
+
+The script writes pooled and per-engine validation metrics, booster sizes, and Pareto-optimal candidates to `reports/validation_pareto.csv` and `reports/validation_pareto.json`. It fits preprocessing on training engines only and evaluates validation at both full resolution and the LSTM-comparable sequence cadence. This experiment does not replace production model artifacts; promote a candidate only after review and a final evaluation on a newly frozen test cohort.
+
 ## Dataset design
 
-- 800 independent engine histories.
+- 1,200 independent engine histories (800 original + 400 extra train-only).
 - 720-1600 one-minute observations per engine.
 - Publicly documented powerpack-monitoring channels only, plus simulation metadata.
 - Multiple operating regimes: idle, cruise, stop-go, acceleration, hill climb, rough terrain.
@@ -82,6 +92,10 @@ python src/predict_edge.py --history reports/edge_demo_history.csv
 The split is by complete engine histories and follows a chronological production-cohort policy. An engine can appear in **exactly one** of train, validation or test.
 
 Model selection and preprocessing fitting happen before the final test evaluation. The final model is retrained on train+validation after those decisions are frozen; the test engines remain untouched until evaluation.
+
+## Production results
+
+Current best (XGBoost + scalar Kalman + linear calibration, 1.89 MiB UBJ package): full held-out test MAE 1.723 h, RMSE 2.315 h, R² 86.27%. See `reports/final_report.md` for the full table, method notes and the exploratory-evaluation caveat.
 
 ## What this is NOT
 

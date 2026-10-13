@@ -1,6 +1,9 @@
 {
-  "lstm_scale": 0.9750000000000001,
-  "lstm_offset_hours": -0.44999999999999984,
-  "lstm_selection_metric": "within_1h_percent",
-  "selection_data": "validation engines only"
+  "xgb_scale": 1.02,
+  "xgb_offset_hours": 0.09999999999999987,
+  "kalman_params": [
+    0.01,
+    1e-05,
+    0.6
+  ]
 }

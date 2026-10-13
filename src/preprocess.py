@@ -44,3 +44,34 @@ def save_preprocessor(directory, qlo, qhi, imputer, feature_columns):
     joblib.dump(qhi, directory / "xgb_qhi.joblib")
     joblib.dump(imputer, directory / "xgb_imputer.joblib")
     joblib.dump(feature_columns, directory / "feature_columns.joblib")
+
+
+SPIKE_THRESHOLDS = {
+    "engine_rpm": 120.0, "transmission_rpm": 120.0,
+    "engine_coolant_temp_c": 8.0, "transmission_oil_temp_c": 8.0,
+    "engine_oil_pressure_bar": 0.8, "clutch_pressure_bar": 1.2,
+    "solenoid_current_a": 0.3, "vehicle_speed_kph": 8.0,
+}
+
+
+def causal_despike(raw: pd.DataFrame) -> pd.DataFrame:
+    """Causal median-5 spike rejection. Past-only, per engine, C-trivial (sort 5).
+    Replaces |x - median(prev5)| > thresh with median. Preserves NaNs."""
+    from features import CORE_SENSORS
+    df = raw.sort_values(["engine_id", "timestamp_min"]).reset_index(drop=True)
+    out = df.copy()
+    for c in CORE_SENSORS:
+        if c not in df.columns:
+            continue
+        th = SPIKE_THRESHOLDS.get(c)
+        if th is None:
+            continue
+        med = df.groupby("engine_id")[c].transform(
+            lambda s: s.shift(1).rolling(5, min_periods=3).median()
+        ).to_numpy(dtype=np.float32)
+        x = df[c].to_numpy(dtype=np.float32)
+        bad = np.isfinite(x) & np.isfinite(med) & (np.abs(x - med) > th)
+        xc = x.copy()
+        xc[bad] = med[bad]
+        out[c] = xc.astype(np.float32)
+    return out

@@ -21,17 +21,23 @@ class CausalRULKalman:
         if self.x is None:
             self.reset(measurement)
             return float(max(measurement, 0.0))
-        A = np.array([[1.0, 1.0], [0.0, 1.0]], dtype=np.float64)
-        H = np.array([[1.0, 0.0]], dtype=np.float64)
-        Q = np.diag([self.q_pos, self.q_vel])
-        R = np.array([[self.measurement_var]], dtype=np.float64)
-        self.x = A @ self.x
-        self.P = A @ self.P @ A.T + Q
-        residual = np.array([[float(measurement)]]) - H @ self.x
-        S = H @ self.P @ H.T + R
-        K = self.P @ H.T @ np.linalg.inv(S)
-        self.x = self.x + (K @ residual).ravel()
-        self.P = (np.eye(2) - K @ H) @ self.P
+        # Scalar 1-D update (S is 1x1): K = P H^T / S, no matrix inverse.
+        # Predict
+        # x = A x, P = A P A^T + Q with A=[[1,1],[0,1]]
+        r0 = float(self.x[0] + self.x[1])
+        r1 = float(self.x[1])
+        p00, p01, p10, p11 = float(self.P[0, 0]), float(self.P[0, 1]), float(self.P[1, 0]), float(self.P[1, 1])
+        q00, q11 = float(self.q_pos), float(self.q_vel)
+        np00 = p00 + p01 + p10 + p11 + q00
+        np01 = p01 + p11
+        np10 = p10 + p11
+        np11 = p11 + q11
+        residual = float(measurement) - r0
+        S = np00 + float(self.measurement_var)
+        k0 = np00 / S
+        k1 = np10 / S
+        self.x = np.array([r0 + k0 * residual, r1 + k1 * residual], dtype=np.float64)
+        self.P = np.array([[np00 - k0 * np00, np01 - k0 * np01], [np10 - k1 * np00, np11 - k1 * np01]], dtype=np.float64)
         self.x[0] = np.clip(self.x[0], 0.0, None)
         self.x[1] = min(self.x[1], 0.0)
         return float(self.x[0])
@@ -45,6 +51,11 @@ def track_by_engine(predictions: np.ndarray, engine_ids: np.ndarray, tracker_cfg
         if tracker is None or eid != prev_engine:
             tracker = CausalRULKalman(*tracker_cfg)
             tracker.reset(float(pred))
+            # First output equals raw measurement (matches predict_edge.py online
+            # path where update() on fresh state returns measurement). Previously
+            # this called update() after reset, adding an extra predict step.
+            out[i] = float(max(float(pred), 0.0))
             prev_engine = eid
-        out[i] = tracker.update(float(pred))
+        else:
+            out[i] = tracker.update(float(pred))
     return out

@@ -1,9 +1,9 @@
 {
   "history_rows": 360,
-  "feature_generation_seconds": 0.08036010002251714,
-  "xgb_prediction_seconds": 0.011833199998363853,
-  "kalman_seconds": 0.16913020005449653,
-  "package_bytes": 1234775,
-  "package_mb": 1.1775732040405273,
-  "last_rul_hours": 12.859880941392422
+  "feature_generation_seconds": 0.01163049999740906,
+  "xgb_prediction_seconds": 0.002557600000727689,
+  "kalman_seconds": 0.0032185999989451375,
+  "package_bytes": 1985758,
+  "package_mb": 1.8937664031982422,
+  "last_rul_hours": 12.831873569736965
 }

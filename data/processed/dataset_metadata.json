@@ -1,6 +1,6 @@
 {
-  "rows": 939590,
-  "engines": 800,
+  "rows": 1408077,
+  "engines": 1200,
   "sensors": [
     "engine_rpm",
     "transmission_rpm",
@@ -24,5 +24,6 @@
     "transmission_wear"
   ],
   "rul_definition": "RUL = simulated run-to-failure time minus current timestamp; no future telemetry is exposed to model features.",
-  "simulation_only": true
+  "simulation_only": true,
+  "note": "800 original + 400 extra train-only engines (801-1200); validation/test cohorts unchanged (561-680/681-800)"
 }

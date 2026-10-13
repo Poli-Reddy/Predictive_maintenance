@@ -5,8 +5,9 @@ import pandas as pd
 import numpy as np
 
 root=Path(__file__).resolve().parents[1]
+_xgb = root/'models/xgb_rul.ubj' if (root/'models/xgb_rul.ubj').exists() else root/'models/xgb_rul.json'
 required=[
- root/'models/xgb_rul.json', root/'models/xgb_imputer.joblib', root/'models/xgb_qlo.joblib', root/'models/xgb_qhi.joblib',
+ _xgb, root/'models/xgb_imputer.joblib', root/'models/xgb_qlo.joblib', root/'models/xgb_qhi.joblib',
  root/'models/feature_columns.joblib', root/'models/kalman_params.joblib', root/'models/lstm_rul.pt', root/'models/lstm_scaler.joblib',
  root/'reports/comparison.csv', root/'reports/xgb_results.json', root/'reports/xgb_test_predictions.csv.gz', root/'reports/lstm_test_predictions.csv.gz',
  root/'data/processed/split_audit.json'
